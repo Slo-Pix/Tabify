@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabify — Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <header class="topbar">
+        <a href="index.html" class="topbar-logo"><img src="logo.png" alt="Tabify" class="topbar-logo-img"></a>
+        <div class="topbar-song-info">
+            <input type="text" id="song-title" class="song-title-input" value="Untitled" placeholder="Song title">
+            <span class="song-sep">—</span>
+            <input type="text" id="song-artist" class="song-artist-input" value="" placeholder="Artist">
+        </div>
+        <div class="topbar-actions">
+            <button class="tb-btn" id="btn-new" title="New Tab">New</button>
+            <button class="tb-btn" id="btn-save" title="Save as .tbfy file (Ctrl+S)">Save</button>
+            <button class="tb-btn" id="btn-open" title="Open .tbfy file">Open</button>
+            <input type="file" id="tbfy-file-input" accept=".tbfy" style="display:none;">
+            <button class="tb-btn" id="btn-export" title="Export as text">Export</button>
+            <button class="tb-btn tb-btn-accent" id="btn-fretboard-toggle" title="Toggle fretboard">Fretboard</button>
+        </div>
+    </header>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <!-- Song Metadata -->
+        <div class="tool-group">
+            <label>Tuning</label>
+            <select id="ed-tuning">
+                <option value="standard">Standard — EADGBE</option>
+                <option value="dropd">Drop D — DADGBE</option>
+                <option value="dadgad">DADGAD</option>
+                <option value="openg">Open G — DGDGBD</option>
+                <option value="opend">Open D — DADF#AD</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+        <div class="tool-group" id="custom-tuning-group" style="display:none;">
+            <label>Custom (low→high)</label>
+            <input type="text" id="ed-custom-tuning" placeholder="E A D G B E" class="tool-input" style="width:140px;">
+        </div>
+        <div class="tool-group">
+            <label>Capo</label>
+            <select id="ed-capo">
+                <option value="0">None</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+        </div>
+        <div class="tool-group">
+            <label>Key</label>
+            <select id="ed-key">
+                <option value="">—</option>
+                <option>C</option><option>C#</option><option>D</option><option>D#</option>
+                <option>E</option><option>F</option><option>F#</option><option>G</option>
+                <option>G#</option><option>A</option><option>A#</option><option>B</option>
+            </select>
+        </div>
+        <div class="tool-group">
+            <label>BPM</label>
+            <input type="number" id="ed-bpm" value="120" min="20" max="300" class="tool-input" style="width:60px;">
+        </div>
+        <div class="tool-group">
+            <label>Time</label>
+            <select id="ed-time-sig">
+                <option value="4/4">4/4</option>
+                <option value="3/4">3/4</option>
+                <option value="6/8">6/8</option>
+                <option value="2/4">2/4</option>
+                <option value="5/4">5/4</option>
+                <option value="7/8">7/8</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+        <div class="tool-group" id="custom-time-group" style="display:none;">
+            <label>Custom</label>
+            <input type="text" id="ed-custom-time" placeholder="5/8" class="tool-input" style="width:60px;">
+        </div>
+
+        <div class="tool-sep"></div>
+
+        <!-- Editing Tools -->
+        <div class="tool-group">
+            <label>Technique</label>
+            <div class="technique-btns">
+                <button class="tech-btn" data-tech="h" title="Hammer-on">h</button>
+                <button class="tech-btn" data-tech="p" title="Pull-off">p</button>
+                <button class="tech-btn" data-tech="/" title="Slide up">/</button>
+                <button class="tech-btn" data-tech="\" title="Slide down">\</button>
+                <button class="tech-btn" data-tech="b" title="Bend">b</button>
+                <button class="tech-btn" data-tech="~" title="Vibrato">~</button>
+                <button class="tech-btn" data-tech="x" title="Muted">x</button>
+                <button class="tech-btn" data-tech="<>" title="Harmonic">&lt;&gt;</button>
+            </div>
+        </div>
+
+        <div class="tool-sep"></div>
+
+        <div class="tool-group">
+            <label>L.H.</label>
+            <div class="technique-btns">
+                <button class="finger-btn" data-finger="1" title="Index">1</button>
+                <button class="finger-btn" data-finger="2" title="Middle">2</button>
+                <button class="finger-btn" data-finger="3" title="Ring">3</button>
+                <button class="finger-btn" data-finger="4" title="Pinky">4</button>
+            </div>
+        </div>
+
+        <div class="tool-group">
+            <label>R.H.</label>
+            <div class="technique-btns">
+                <button class="finger-btn" data-finger="P" title="Pulgar (Thumb)">P</button>
+                <button class="finger-btn" data-finger="I" title="Index">I</button>
+                <button class="finger-btn" data-finger="M" title="Middle">M</button>
+                <button class="finger-btn" data-finger="A" title="Anular (Ring)">A</button>
+                <button class="finger-btn" data-finger="C" title="Chiquito (Pinky)">C</button>
+            </div>
+        </div>
+
+        <div class="tool-sep"></div>
+
+        <div class="tool-group">
+            <label>Edit</label>
+            <div class="technique-btns">
+                <button class="tb-btn" id="btn-undo" title="Undo (Ctrl+Z)">Undo</button>
+                <button class="tb-btn" id="btn-redo" title="Redo (Ctrl+Shift+Z)">Redo</button>
+                <button class="tb-btn" id="btn-copy-measure" title="Copy measure (Ctrl+C)">Copy</button>
+                <button class="tb-btn" id="btn-paste-measure" title="Paste measure (Ctrl+V)">Paste</button>
+            </div>
+        </div>
+
+        <div class="tool-sep"></div>
+
+        <div class="tool-group">
+            <label>Structure</label>
+            <div class="technique-btns">
+                <button class="tb-btn" id="btn-add-section" title="Add section">+ Section</button>
+                <button class="tb-btn" id="btn-add-measure" title="Add measure">+ Measure</button>
+                <button class="tb-btn" id="btn-del-measure" title="Delete current measure">- Measure</button>
+                <button class="tb-btn" id="btn-transpose" title="Transpose">Transpose</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Main Editor Area -->
+    <main class="editor-main">
+        <div class="editor-scroll" id="editor-scroll">
+            <div class="tab-canvas" id="tab-canvas">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Fretboard Reference Panel (toggleable) -->
+    <div class="fretboard-panel hidden" id="fretboard-panel">
+        <div class="fb-panel-header">
+            <h3>Fretboard Reference</h3>
+            <div class="fb-controls">
+                <select id="fb-scale">
+                    <option value="none">No scale</option>
+                    <option value="major">Major</option>
+                    <option value="minor">Natural Minor</option>
+                    <option value="pentatonic-major">Pentatonic Major</option>
+                    <option value="pentatonic-minor">Pentatonic Minor</option>
+                    <option value="blues">Blues</option>
+                    <option value="dorian">Dorian</option>
+                    <option value="mixolydian">Mixolydian</option>
+                    <option value="harmonic-minor">Harmonic Minor</option>
+                    <option value="phrygian">Phrygian</option>
+                </select>
+                <select id="fb-root">
+                    <option value="0">C</option><option value="1">C#</option>
+                    <option value="2">D</option><option value="3">D#</option>
+                    <option value="4">E</option><option value="5">F</option>
+                    <option value="6">F#</option><option value="7">G</option>
+                    <option value="8">G#</option><option value="9">A</option>
+                    <option value="10">A#</option><option value="11">B</option>
+                </select>
+                <label class="fb-toggle-label">
+                    <input type="checkbox" id="fb-harmonics"> Harmonics
+                </label>
+                <label>Frets:</label>
+                <input type="number" id="fb-frets" value="12" min="5" max="24" style="width:50px;">
+            </div>
+            <button class="fb-close" id="fb-close">&times;</button>
+        </div>
+        <div class="fb-board-container">
+            <div id="fb-board" class="fb-board"></div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <footer class="statusbar">
+        <span id="status-cursor">Measure 1 · Beat 1 · String 1</span>
+        <span id="status-info">Arrows: navigate · 0-9: fret · Del: clear · Ctrl+Z/Y: undo/redo</span>
+        <span id="status-saved"></span>
+    </footer>
+
+    <!-- Transpose Modal -->
+    <div class="modal-overlay hidden" id="transpose-modal">
+        <div class="modal">
+            <h3>Transpose</h3>
+            <div class="modal-body">
+                <label>Semitones</label>
+                <input type="number" id="transpose-amount" value="0" min="-12" max="12">
+                <p class="modal-hint">Positive = up, Negative = down</p>
+            </div>
+            <div class="modal-actions">
+                <button class="tb-btn" id="transpose-cancel">Cancel</button>
+                <button class="tb-btn tb-btn-accent" id="transpose-apply">Transpose</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Name Modal -->
+    <div class="modal-overlay hidden" id="section-modal">
+        <div class="modal">
+            <h3>Add Section</h3>
+            <div class="modal-body">
+                <label>Section name</label>
+                <select id="section-name-preset">
+                    <option value="Intro">Intro</option>
+                    <option value="Verse">Verse</option>
+                    <option value="Chorus">Chorus</option>
+                    <option value="Bridge">Bridge</option>
+                    <option value="Solo">Solo</option>
+                    <option value="Outro">Outro</option>
+                    <option value="Interlude">Interlude</option>
+                    <option value="Pre-Chorus">Pre-Chorus</option>
+                    <option value="custom">Custom...</option>
+                </select>
+                <input type="text" id="section-name-custom" class="tool-input hidden" placeholder="Custom name">
+                <label style="margin-top:0.5rem;">Measures in section</label>
+                <input type="number" id="section-measures" value="4" min="1" max="64" class="tool-input" style="width:60px;">
+            </div>
+            <div class="modal-actions">
+                <button class="tb-btn" id="section-cancel">Cancel</button>
+                <button class="tb-btn tb-btn-accent" id="section-apply">Add</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="export.js"></script>
+    <script src="editor.js"></script>
+</body>
+</html>

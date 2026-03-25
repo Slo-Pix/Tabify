@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabify — Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #f5f2ed;
+            --text: #1a1a1a;
+            --text-light: #666;
+            --text-muted: #999;
+            --border: #d4d0c8;
+            --card-bg: #fff;
+            --serif: 'Playfair Display', Georgia, serif;
+            --sans: 'Inter', -apple-system, sans-serif;
+            --mono: 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Top bar */
+        .docs-topbar {
+            display: flex;
+            align-items: center;
+            padding: 1rem 3rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--card-bg);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .docs-topbar a.logo {
+            font-family: var(--serif);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            font-style: italic;
+        }
+
+        .docs-topbar nav {
+            margin-left: auto;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .docs-topbar nav a {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 0.03em;
+        }
+
+        .docs-topbar nav a:hover { color: var(--text); }
+
+        /* Layout */
+        .docs-layout {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Sidebar */
+        .docs-sidebar {
+            width: 240px;
+            padding: 2rem 1.5rem;
+            border-right: 1px solid var(--border);
+            position: sticky;
+            top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .docs-sidebar h4 {
+            font-family: var(--serif);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .docs-sidebar h4:first-child { margin-top: 0; }
+
+        .docs-sidebar a {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.3rem 0;
+            transition: color 0.15s;
+        }
+
+        .docs-sidebar a:hover { color: var(--text); }
+        .docs-sidebar a.active { color: var(--text); font-weight: 600; }
+
+        /* Content */
+        .docs-content {
+            flex: 1;
+            padding: 3rem 4rem;
+            max-width: 800px;
+        }
+
+        .docs-content h1 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .docs-content h2 {
+            font-family: var(--serif);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .docs-content h3 {
+            font-family: var(--sans);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .docs-content p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .docs-content .subtitle {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .docs-content ul, .docs-content ol {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .docs-content li { margin-bottom: 0.4rem; }
+
+        .docs-content code {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            background: #eae7e0;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .docs-content pre {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .docs-content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-size: 0.8rem;
+        }
+
+        .docs-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .docs-content th {
+            text-align: left;
+            padding: 0.6rem 1rem;
+            border-bottom: 2px solid var(--border);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .docs-content td {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .docs-content td code {
+            font-size: 0.78rem;
+        }
+
+        .docs-content .callout {
+            background: var(--card-bg);
+            border-left: 3px solid var(--text);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .docs-topbar {
+                padding: 0.75rem 1rem;
+            }
+            .docs-topbar nav {
+                gap: 1rem;
+            }
+            .docs-topbar nav a {
+                font-size: 0.75rem;
+            }
+            .docs-layout { flex-direction: column; }
+            .docs-sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0 1.5rem;
+            }
+            .docs-sidebar h4 {
+                width: 100%;
+                margin-top: 0.75rem;
+            }
+            .docs-sidebar a {
+                padding: 0.2rem 0;
+            }
+            .docs-content {
+                padding: 1.5rem 1rem;
+            }
+            .docs-content h1 {
+                font-size: 1.5rem;
+            }
+            .docs-content h2 {
+                font-size: 1.15rem;
+                margin-top: 2rem;
+            }
+            .docs-content pre {
+                padding: 0.75rem 1rem;
+                font-size: 0.7rem;
+            }
+            .docs-content pre code {
+                font-size: 0.7rem;
+            }
+            .docs-content table {
+                font-size: 0.75rem;
+                display: block;
+                overflow-x: auto;
+            }
+            .docs-content th,
+            .docs-content td {
+                padding: 0.4rem 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="docs-topbar">
+        <a href="index.html" class="logo"><img src="logo.png" alt="Tabify" style="height:28px;width:auto;border-radius:3px;"></a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="editor.html">Editor</a>
+            <a href="docs.html">Docs</a>
+        </nav>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <h4>Getting Started</h4>
+            <a href="#overview" class="active">Overview</a>
+            <a href="#quick-start">Quick Start</a>
+
+            <h4>Web Editor</h4>
+            <a href="#navigation">Navigation</a>
+            <a href="#entering-notes">Entering Notes</a>
+            <a href="#techniques">Techniques</a>
+            <a href="#fingers">Finger Notation</a>
+            <a href="#sections">Sections & Measures</a>
+            <a href="#save-open">Save & Open</a>
+            <a href="#fretboard">Fretboard Reference</a>
+            <a href="#export">Export</a>
+
+            <h4>Reference</h4>
+            <a href="#tbfy-format">.tbfy Format</a>
+            <a href="#shortcuts">Keyboard Shortcuts</a>
+            <a href="#tunings">Supported Tunings</a>
+        </aside>
+
+        <main class="docs-content">
+            <h1 id="overview">Documentation</h1>
+            <p class="subtitle">Everything you need to know about Tabify.</p>
+
+            <p>Tabify is a guitar arrangement tool available as a web editor. It uses a custom <code>.tbfy</code> format (JSON-based) to store tablature with techniques, finger annotations, and metadata.</p>
+
+            <h2 id="quick-start">Quick Start</h2>
+            <p>Open <a href="editor.html">the editor</a> in your browser. No installation needed. Use arrow keys to navigate the grid and type numbers for fret values.</p>
+
+            <h2 id="navigation">Navigation</h2>
+            <p>The editor displays tablature as a grid of cells across 6 strings. Move around with:</p>
+            <ul>
+                <li><strong>Arrow keys</strong> — move one cell in any direction</li>
+                <li><strong>Tab</strong> — jump forward one beat (skips subdivisions)</li>
+                <li>Click any cell to move the cursor there</li>
+            </ul>
+
+            <h2 id="entering-notes">Entering Notes</h2>
+            <p>With the cursor on a cell, type a fret number:</p>
+            <ul>
+                <li><strong>0-9</strong> — single digit fret numbers are entered instantly</li>
+                <li><strong>Multi-digit</strong> — type quickly for frets 10-24 (e.g. type <code>1</code> then <code>2</code> for fret 12)</li>
+                <li><strong>x</strong> — muted string</li>
+                <li><strong>Delete / Backspace</strong> — clear the current cell</li>
+            </ul>
+
+            <h2 id="techniques">Techniques</h2>
+            <p>Apply a technique to any note using the toolbar buttons or keyboard shortcuts:</p>
+            <table>
+                <tr><th>Key</th><th>Technique</th></tr>
+                <tr><td><code>h</code></td><td>Hammer-on</td></tr>
+                <tr><td><code>p</code></td><td>Pull-off</td></tr>
+                <tr><td><code>/</code></td><td>Slide up</td></tr>
+                <tr><td><code>\</code></td><td>Slide down</td></tr>
+                <tr><td><code>b</code></td><td>Bend</td></tr>
+                <tr><td><code>~</code></td><td>Vibrato</td></tr>
+                <tr><td><code>&lt;&gt;</code></td><td>Harmonic (toolbar only)</td></tr>
+            </table>
+            <p>Click a technique button once to activate it — the next note entered will carry that technique. Click again to deactivate.</p>
+            <p>Techniques are displayed differently depending on type:</p>
+            <ul>
+                <li><strong>Slide, hammer-on, pull-off</strong> — appear between notes (on the left edge of the cell)</li>
+                <li><strong>Bend, vibrato, muted</strong> — appear above the note</li>
+                <li><strong>Harmonics</strong> — wrap the fret number inline, e.g. <code>&lt;12&gt;</code>, <code>&lt;7&gt;</code></li>
+            </ul>
+
+            <h3>Harmonics</h3>
+            <p>Tabify supports two types of harmonics:</p>
+            <ul>
+                <li><strong>Natural harmonics</strong> — played on an open string at harmonic nodes (frets 5, 7, 12, etc.). Notated as <code>&lt;12&gt;</code>, <code>&lt;7&gt;</code>, <code>&lt;5&gt;</code>.</li>
+                <li><strong>Artificial harmonics</strong> — a fret is pressed and a harmonic is played relative to that position. Notated as <code>2&lt;7&gt;</code> (fret 2 pressed, harmonic at fret 7).</li>
+            </ul>
+            <p>To enter a <strong>natural harmonic</strong>:</p>
+            <ol>
+                <li>Click the <code>&lt;&gt;</code> button in the toolbar to activate harmonic mode</li>
+                <li>Type the harmonic fret number (e.g. <code>12</code>) — the cell shows <code>&lt;12&gt;</code></li>
+            </ol>
+            <p>To enter an <strong>artificial harmonic</strong>:</p>
+            <ol>
+                <li>Click the <code>&lt;&gt;</code> button to activate harmonic mode</li>
+                <li>Type the fretted note (e.g. <code>3</code>) — the cell shows <code>&lt;3&gt;</code></li>
+                <li>Type the harmonic node on the same cell (e.g. <code>4</code>) — the cell updates to <code>3&lt;4&gt;</code></li>
+            </ol>
+
+            <h2 id="fingers">Finger Notation</h2>
+            <p>Tabify supports both left-hand and right-hand finger annotations, displayed as superscripts around each note:</p>
+
+            <h3>Left Hand (L.H.) — appears on the left of the note</h3>
+            <table>
+                <tr><th>Button</th><th>Finger</th></tr>
+                <tr><td><code>1</code></td><td>Index</td></tr>
+                <tr><td><code>2</code></td><td>Middle</td></tr>
+                <tr><td><code>3</code></td><td>Ring</td></tr>
+                <tr><td><code>4</code></td><td>Pinky</td></tr>
+            </table>
+
+            <h3>Right Hand (R.H.) — appears on the right of the note</h3>
+            <table>
+                <tr><th>Button</th><th>Finger</th></tr>
+                <tr><td><code>P</code></td><td>Pulgar (Thumb)</td></tr>
+                <tr><td><code>I</code></td><td>Index</td></tr>
+                <tr><td><code>M</code></td><td>Middle</td></tr>
+                <tr><td><code>A</code></td><td>Anular (Ring)</td></tr>
+                <tr><td><code>C</code></td><td>Chiquito (Pinky)</td></tr>
+            </table>
+            <p>Left-hand annotations appear in <span style="color:#27ae60;font-weight:600;">green</span> as superscripts to the left of the note. Right-hand annotations appear in <span style="color:#2980b9;font-weight:600;">blue</span> as superscripts to the right.</p>
+
+            <h2 id="sections">Sections & Measures</h2>
+            <p>Organize your tab into named sections (Intro, Verse, Chorus, etc.):</p>
+            <ul>
+                <li><strong>+ Section</strong> — add a new section with a preset or custom name</li>
+                <li><strong>+ Measure</strong> — add a measure after the current one</li>
+                <li><strong>- Measure</strong> — delete the current measure</li>
+                <li>Use the arrow buttons in section headers to reorder sections</li>
+                <li>Copy and paste measures with <code>Ctrl+C</code> / <code>Ctrl+V</code></li>
+            </ul>
+
+            <h2 id="save-open">Save & Open</h2>
+            <p>Tabify uses file-based saving with the <code>.tbfy</code> format:</p>
+            <ul>
+                <li><strong>Save</strong> (or <code>Ctrl+S</code>) — downloads a <code>.tbfy</code> file to your device. The filename is based on the song title.</li>
+                <li><strong>Open</strong> — opens a file picker to load any <code>.tbfy</code> file into the editor.</li>
+            </ul>
+            <p>Files are saved to your device's downloads folder. There are no storage limits, and files can be shared, backed up, or opened on any device with a browser.</p>
+
+            <h2 id="fretboard">Fretboard Reference</h2>
+            <p>Click <strong>Fretboard</strong> in the top bar to open an interactive fretboard panel. The fretboard dynamically adapts to whatever tuning is set in the editor, including custom tunings.</p>
+            <ul>
+                <li>Select a <strong>scale</strong> and <strong>root note</strong> to see scale degrees across the neck</li>
+                <li>Supports: major, minor, pentatonic (major/minor), blues, dorian, mixolydian, harmonic minor, and phrygian</li>
+                <li>Enable <strong>Harmonics</strong> to see natural harmonic nodes at frets 3, 4, 5, 7, 12, 19, and 24</li>
+                <li>Adjust the number of <strong>frets</strong> displayed (5-24)</li>
+            </ul>
+
+            <h2 id="export">Export</h2>
+            <p>Click <strong>Export</strong> in the top bar to generate a printable HTML page of your tab. The export renders a visual grid matching the editor layout, with string lines, measure bars, and fret numbers. You can print it or save as PDF from your browser's print dialog.</p>
+
+            <h2 id="tbfy-format">.tbfy File Format</h2>
+            <p>The <code>.tbfy</code> format is JSON with the following structure:</p>
+            <pre><code>{
+  "title": "Song Name",
+  "artist": "Artist",
+  "tuning": "standard",
+  "capo": 0,
+  "key": "Am",
+  "bpm": 120,
+  "timeSig": "4/4",
+  "beatsPerMeasure": 4,
+  "subdivisions": 4,
+  "sections": [
+    {
+      "name": "Intro",
+      "measures": [
+        {
+          "columns": [
+            {
+              "notes": [null, null, 0, 2, 2, 0],
+              "techniques": [null, null, null, null, null, null],
+              "fingers": [null, null, null, null, null, null],
+              "lhFingers": [null, null, null, null, null, null]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</code></pre>
+            <p>Each column represents one subdivision (default: 16th note). The <code>notes</code> array maps to strings low E through high e (index 0-5). Values are fret numbers, <code>"x"</code> for muted, or <code>null</code> for empty.</p>
+
+            <h2 id="shortcuts">Keyboard Shortcuts</h2>
+            <table>
+                <tr><th>Key</th><th>Action</th></tr>
+                <tr><td><code>Arrow keys</code></td><td>Move cursor</td></tr>
+                <tr><td><code>Tab</code></td><td>Jump one beat forward</td></tr>
+                <tr><td><code>0-9</code></td><td>Enter fret number</td></tr>
+                <tr><td><code>Delete</code></td><td>Clear cell</td></tr>
+                <tr><td><code>Escape</code></td><td>Close modals</td></tr>
+                <tr><td><code>Ctrl+Z</code></td><td>Undo</td></tr>
+                <tr><td><code>Ctrl+Shift+Z</code> / <code>Ctrl+Y</code></td><td>Redo</td></tr>
+                <tr><td><code>Ctrl+C</code></td><td>Copy measure</td></tr>
+                <tr><td><code>Ctrl+V</code></td><td>Paste measure</td></tr>
+                <tr><td><code>Ctrl+S</code></td><td>Save as .tbfy file</td></tr>
+            </table>
+
+            <h2 id="tunings">Supported Tunings</h2>
+            <table>
+                <tr><th>Name</th><th>Notes</th></tr>
+                <tr><td>Standard</td><td>E A D G B E</td></tr>
+                <tr><td>Drop D</td><td>D A D G B E</td></tr>
+                <tr><td>DADGAD</td><td>D A D G A D</td></tr>
+                <tr><td>Open G</td><td>D G D G B D</td></tr>
+                <tr><td>Open D</td><td>D A D F# A D</td></tr>
+                <tr><td>Custom</td><td>Enter any 6 note names in the editor</td></tr>
+            </table>
+        </main>
+    </div>
+
+</body>
+</html>
